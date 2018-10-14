@@ -1,0 +1,43 @@
+# jobqueue.yaml
+# Example configuration for a cluser with job queuing: PBS, Slurm, MOAB, SGE, or LSF.
+# If placed in ~/.config/dask/ then dask-jobqueue will use these values by default.
+
+distributed:
+  scheduler:
+    bandwidth: 1000000000     # GB MB/s estimated worker-worker bandwidth
+  worker:
+    memory:
+      target: 0.90              # Avoid spilling to disk
+      spill: False              # Avoid spilling to disk
+      pause: 0.80               # Fraction at which we pause worker threads
+      terminate: 0.95           # Fraction at which we terminate the worker
+  comm:
+    compression: null
+
+jobqueue:
+  pbs:                        # PBS resource manager options
+    name: dask-worker           # Dask worker options
+    cores: 36                   # Total number of cores per job
+    memory: '109 GB'            # Total amount of memory per job
+    processes: 9                # Number of Python processes per job
+    interface: ib0              # Network interface to use like eth0 or ib0
+    queue: regular              # Can also select high_mem, batch or gpu_ssd
+    walltime: '00:30:00'        # Adjust this to job size
+    death-timeout: 60           # Number of seconds to wait if worker can not find     a scheduler
+    local-directory: null       # Location of fast local storage like /scratch or $TM    PDIR
+    resource-spec: select=1:ncpus=36:mem=109GB
+    project: null
+    extra: ""
+    env-extra: []
+    resource-spec: null
+    job-extra: []
+
+  slurm:
+    name: dask-worker
+    cores: 1
+    memory: '25 GB'
+    processes: 1
+    interface: ib0
+    project: PXYZ123
+    walltime: '00:30:00'
+    job-extra: {-C geyser}

@@ -1,0 +1,11 @@
+# logging.yaml
+# Example configuration for logging.
+# If placed in ~/.config/dask/ then dask-jobqueue will use these values by default.
+
+logging:
+  distributed: info
+  distributed.client: warning  # set to debug for very verbose output
+  distributed.worker: warning
+  bokeh: critical
+  tornado: critical
+  tornado.application: critical
