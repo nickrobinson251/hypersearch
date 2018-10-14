@@ -1,0 +1,10 @@
+Categorical:
+     - max_depth:
+       - 3
+        - None
+    - criterion:
+        - "gini"
+        - "entropy"
+learning_rate:
+  - 1e-6
+  - 1e1
