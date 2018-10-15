@@ -1,4 +1,4 @@
-"""Wrappers for saving and loading, just to make useage a bit friendlier."""
+"""Wrap  saving and loading, to make useage easier and in case we swap joblib."""
 from sklearn.externals import joblib
 
 def dump(obj, filename):

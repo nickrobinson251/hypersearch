@@ -23,7 +23,7 @@ def search(model,
            method="randomized",
            n_iter=30,
            cv=5,
-           **kwargs)::
+           **kwargs):
     """Run a cross-validated search for hyperparameters."""
     if method.lower() == "randomized":
         search = RandomizedSearchCV(
