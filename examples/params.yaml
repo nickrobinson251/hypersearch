@@ -1,0 +1,21 @@
+Categorical:
+    - max_depth:
+        - 3
+        - None
+    - criterion:
+        - "gini"
+        - "entropy"
+Integer:
+    - max_features:
+        - 1
+        - 11
+    - min_samples_split:
+        - 2
+        - 11
+    - bootstrap:
+        - 0
+        - 1
+# Real:
+#     - learning_rate:
+#         - 1e-6
+#         - 1e1
