@@ -50,6 +50,8 @@ model_optimized = results.best_estimator_
 For general advice on hyperparameter tuning and how to use the results,
 see the [sklearn user guide](http://scikit-learn.org/stable/modules/grid_search.html#grid-search).
 
+For a full working example on a simple classification model, see examples/optimize_hyperparameters.py`.
+
 ### Specifying hyperparameter search space
 
 For this to work, we need to specify a search space (`params` above). This can 
