@@ -1,6 +1,7 @@
 """Search for Hyperparameters."""
 import argparse
 import logging
+import os
 import dask_ml.joblib  # think this is needed to regiaster dask joblib context
 from dask.distributed import Client, progress
 from sklearn.datasets import load_digits
@@ -8,6 +9,9 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.externals import joblib
 
 from hypersearch import search, dump, launch_cluster, parse_params
+
+
+CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
 
 
 def parse_args():
@@ -40,7 +44,7 @@ if __name__ == '__main__':
     model = RandomForestClassifier(n_estimators=20)
 
     # replace with your hyperparameter search config
-    config = "../examples/params.yaml"
+    config = os.path.join(CURRENT_DIR, "params.yaml")
     params = parse_params(config, args.method)
 
     # set up context manager for distributing computations
