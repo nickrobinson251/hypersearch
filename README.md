@@ -2,6 +2,8 @@
 
 A small python library for distributed hyperparameter search.
 
+NOTE: THIS IS WORK IN PROGRESS AND WRITTEN IN ONE DAY. DO NOT USE IN PRODUCTION!
+
 ## Installation
 
 ```
