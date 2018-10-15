@@ -44,6 +44,9 @@ dump(result, "results_object")  # serialise to disk
 print(results.best_params_, results.best_score_)
 model_optimized = results.best_estimator_
 ```
+`results` is a exactly the same object as if you were using scikit-learn.
+For general advice on hyperparameter tuning and how to use the results,
+see the [sklearn user guide](http://scikit-learn.org/stable/modules/grid_search.html#grid-search).
 
 ### Specifying hyperparameter search space
 
