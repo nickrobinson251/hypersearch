@@ -4,5 +4,5 @@ from sklearn.externals import joblib
 def dump(obj, filename):
     return joblib.dump(obj, filename)
 
-def load(obj, filename):
+def load(filename):
     return joblib.load(filename)
