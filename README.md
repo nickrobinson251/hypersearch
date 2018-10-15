@@ -5,8 +5,8 @@ A small python library for distributed hyperparameter search.
 ## Installation
 
 ```
-git clone this_repo loc
-pip install loc
+git clone https://github.com/nickrobinson251/hypersearch.git
+pip install hypersearch
 ```
 
 ## Use case
@@ -17,34 +17,65 @@ to go, except your model has a bunch of hyperparameters: batch size, learning
 rate, regularisation term, etc. How can you efficeintly find good settings of
 these parameters?
 
-We provide a simple, consistent interface for searching over parameters, whether
-training on your local machine, in the cloud, or on a high-perfoormance
-computers with a job scheduler.
+We aim to provide a simple, consistent interface for searching over parameters, whether
+training on your local machine, in the cloud, or on a High
+Performance Computer (HPC) cluster with a job scheduler.
 
 ## Usage
 
 First create and then activate a new conda environment
 ```
 conda env create -f environment.yml
-conda activate hyperparam
+conda activate hypersearch
 ```
 
 Here are [install instructions for  Anaconda or Miniconda](http://docs.anaconda.com/anaconda/install/), if your machine does not already have it.
 
+Then assuming you have a `model` and labelled dataset (`X`, `y`) ready to train, you can use
+the `search` function:
+
+```python
+from hypersearch import search, dump
+
+method = "Randomized"  # could also be "Grid" or "Bayes"  
+result = search(model, X, y, params, method=method)
+dump(result, "results_object")  # serialise to disk
+
+print(results.best_params_, results.best_score_)
+model_optimized = results.best_estimator_
+```
+
+### Specifying hyperparameter search space
+
+For this to work, we need to specify a search space (`params` above). This can 
+be done by either:
+1. Using a config file - this provides a consistent interface, allowing you to write one config 
+and use it with any search method. The config must be of the format given in `examples/params.yaml`.
+2. Progammitcally specify our own distribution over parameters - this allows for arbitrary distributions over
+integer and real-valued hyperparameters, useful for "Randomized" and "bayes" search. An example is given in 
+`examples/params.py`.
+
+### Choosing a search method
+
+Three search methods are currently available. We essentially provide a wrapper that ensures
+distributed training, please see the documentation of the underlying methods:
+1. "Grid" : [GridSearchCV](http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html#sklearn.model_selection.GridSearchCV)
+2. "Randomized" : [RandomizedSearchCV](http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.RandomizedSearchCV.html)
+3. "Bayes" : [BayesSearchCV](https://scikit-optimize.github.io/#skopt.BayesSearchCV)
+
 ### Using a remote machine
 
-If running dask on a remote machine, such as an AWS EC2 instance or a High
-Performance Computer, You may still want to setup access to the dask dashboard for
-montioring your job.
-
-Ycan set up SSH port-forward to access this dashboard (a HTTP server running
-on the remote machine). From your local machine run:
+Hypersearch is powered by dask, which provides a useful web dashboard for
+montioring your jobs. If running dask on a remote machine, such as an AWS EC2
+instance or a HPC, you can set up SSH port-forward to access this dashboard
+(a HTTP server running on the remote machine). From your local machine run:
 ```
 ssh -N -L 8787:remotehostname:8787 myusername@remotehost.com
 ```
-where `remotehostname` is the host name of the machine running dask and `myusername@...` is the
-publically available address, i.e. the address you used when you first SSH'ed
-into the remote machine. `8787` is the default port for the dask dashboard. You
+where `remotehostname` is the host name of the machine running hypersearch/dask
+and `myusername@...` is the publically available address,
+i.e. the address you used when you first SSH'ed into the remote machine.
+`8787` is the default port for the dask dashboard. You
 need to make sure this port is not in use on your local machine (e.g. for a
 local dask client) or forward to another port.
 
@@ -56,25 +87,26 @@ instance or a
 
 ### Using a HPC cluster
 
-You can set up a configuration file specific to your cluster (see examples/jobqueue.yaml) and connect as shown in examples/cluster.py. Note that the import needs to change depending on your job manager, e.g. `import PBSCluster`.
+You can set up a configuration file specific to your cluster (see `examples/jobqueue.yaml`)
+and connect as shown in `examples/cluster.py` or `examples/optimize_hyperparameters.py`.
 
 ### Using Kubernetes or Yarn
 
-Please instead see [dask-kubernetes](https://kubernetes.dask.org/en/latest/) or [dask-yarn](https://yarn.dask.org/en/latest/)  rather than using dask-jobqueue. Usage is very similar but these packages will need to be installed.
+Please instead see [dask-kubernetes](https://kubernetes.dask.org/en/latest/) or [dask-yarn](https://yarn.dask.org/en/latest/) rather than using dask-jobqueue. Usage is very similar but these packages will need to be installed.
 
 ### Debugging
 
-This is not yet very well tested in general. If you hit a problem (sorry), you
-may want to check out [Dask's advice on
-debugging](http://docs.dask.org/en/latest/debugging.html).
+This is not yet very well tested in general. Sorry! If you hit a problem, you
+may find [Dask's advice ondebugging](http://docs.dask.org/en/latest/debugging.html) helpful.
 
 ## Testing
 
 Simply run
 
 ```
-py.test
+pytest
 ```
+Unfortunately, we currently only test the parsing of the parameter config file! So, be careful, and monitor your comuting resources manually (for now). 
 
 ### Similar packages
 
